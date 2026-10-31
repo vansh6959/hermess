@@ -1,0 +1,2700 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Self-hosted Latin variable fonts, preloaded in the document head. */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url("/fonts/inter-variable-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
+    U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+    U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Inter Tight";
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url("/fonts/inter-tight-variable-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
+    U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+    U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Instrument Serif";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/instrument-serif-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
+    U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+    U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* ==========================================================================
+   HERMES · design tokens
+   ========================================================================== */
+
+:root {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Inter Tight", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Instrument Serif", Georgia, "Times New Roman", serif;
+
+  --bg: #040506;
+  --bg-soft: #080b0b;
+  --surface: rgba(228, 241, 233, 0.035);
+  --surface-strong: rgba(9, 13, 12, 0.74);
+  --line: rgba(214, 236, 224, 0.075);
+  --line-strong: rgba(214, 236, 224, 0.15);
+
+  --text: #e7ede8;
+  --text-dim: #a6afa8;
+  --text-mute: #7d8780;
+
+  --acid: #bfe3cd;
+  --acid-soft: rgba(191, 227, 205, 0.12);
+  --mint: #8fb9a3;
+  --rose: #d9a3a3;
+  --danger: #e69a9a;
+
+  --shadow-deep: 0 44px 110px -48px rgba(0, 0, 0, 0.96);
+  --shadow-card: 0 30px 80px -44px rgba(0, 0, 0, 0.92);
+  --rim: linear-gradient(
+    150deg,
+    rgba(226, 244, 235, 0.26),
+    rgba(226, 244, 235, 0.05) 26%,
+    rgba(226, 244, 235, 0) 52%,
+    rgba(226, 244, 235, 0.07) 78%,
+    rgba(226, 244, 235, 0.18)
+  );
+
+  --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --player-h: 88px;
+  --noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: dark;
+  scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-feature-settings: "cv11", "ss01";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgba(191, 227, 205, 0.3);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 2px solid rgba(191, 227, 205, 0.7);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ==========================================================================
+   Scrollbars
+   ========================================================================== */
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.13);
+  border: 3px solid transparent;
+  background-clip: padding-box;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.24);
+  border: 3px solid transparent;
+  background-clip: padding-box;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@layer components {
+/* ==========================================================================
+   Surfaces
+   ========================================================================== */
+
+.liquid {
+  position: relative;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(220, 240, 230, 0.052) 0%,
+      rgba(255, 255, 255, 0.012) 42%,
+      rgba(220, 240, 230, 0.02) 100%
+    ),
+    rgba(8, 11, 11, 0.62);
+  border: 1px solid var(--line);
+  box-shadow:
+    0 1px 0 rgba(226, 244, 235, 0.05) inset,
+    0 -1px 0 rgba(0, 0, 0, 0.4) inset,
+    var(--shadow-card);
+  backdrop-filter: blur(30px) saturate(1.12);
+  -webkit-backdrop-filter: blur(30px) saturate(1.12);
+}
+
+.liquid-raised {
+  position: relative;
+  background:
+    linear-gradient(
+      165deg,
+      rgba(226, 244, 235, 0.08) 0%,
+      rgba(255, 255, 255, 0.02) 36%,
+      rgba(226, 244, 235, 0.028) 100%
+    ),
+    rgba(7, 10, 10, 0.78);
+  border: 1px solid rgba(214, 236, 224, 0.1);
+  box-shadow:
+    0 1px 0 rgba(226, 244, 235, 0.1) inset,
+    0 -1px 0 rgba(0, 0, 0, 0.45) inset,
+    0 36px 90px -36px rgba(0, 0, 0, 0.96);
+  backdrop-filter: blur(38px) saturate(1.15);
+  -webkit-backdrop-filter: blur(38px) saturate(1.15);
+}
+
+.liquid-inset {
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.32), rgba(0, 0, 0, 0.14)),
+    rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.05) inset,
+    0 8px 24px -16px rgba(0, 0, 0, 0.8) inset;
+}
+
+/* 1px specular rim */
+.rim::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--rim);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.34;
+  pointer-events: none;
+}
+
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  background-image: var(--noise);
+  opacity: 0.055;
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+}
+
+.sheen::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: -40% -60%;
+  background: linear-gradient(
+    100deg,
+    transparent 38%,
+    rgba(226, 244, 235, 0.03) 48%,
+    rgba(226, 244, 235, 0.06) 50%,
+    transparent 62%
+  );
+  transform: translateX(-30%);
+  pointer-events: none;
+  animation: sheen 19s var(--ease-out) infinite;
+}
+
+@keyframes sheen {
+  0%,
+  62% {
+    transform: translateX(-40%);
+  }
+  88%,
+  100% {
+    transform: translateX(40%);
+  }
+}
+
+/* ==========================================================================
+   Controls
+   ========================================================================== */
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  color: var(--text-dim);
+  border: 1px solid transparent;
+  transition:
+    color 0.18s ease,
+    background 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s var(--ease-spring);
+}
+.icon-btn:hover {
+  color: var(--text);
+  background: rgba(226, 244, 235, 0.05);
+  border-color: rgba(226, 244, 235, 0.07);
+}
+.icon-btn:active {
+  transform: scale(0.94);
+}
+.icon-btn[data-active="true"] {
+  color: var(--acid);
+  background: var(--acid-soft);
+  border-color: rgba(191, 227, 205, 0.2);
+}
+.icon-btn:disabled {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.play-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  background: linear-gradient(160deg, #effbf4 0%, var(--acid) 44%, #8fbfa5 100%);
+  color: #07100b;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.7) inset,
+    0 -2px 0 rgba(0, 0, 0, 0.18) inset,
+    0 0 42px -8px rgba(191, 227, 205, 0.3);
+  transition:
+    transform 0.25s var(--ease-spring),
+    box-shadow 0.3s ease,
+    filter 0.25s ease;
+}
+.play-btn:hover {
+  transform: scale(1.035);
+  filter: brightness(1.03);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.78) inset,
+    0 -2px 0 rgba(0, 0, 0, 0.18) inset,
+    0 0 54px -6px rgba(191, 227, 205, 0.4);
+}
+.play-btn:active {
+  transform: scale(0.97);
+}
+.play-btn--lg {
+  width: 68px;
+  height: 68px;
+}
+.play-btn--sm {
+  width: 44px;
+  height: 44px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  background: rgba(226, 244, 235, 0.04);
+  border: 1px solid rgba(214, 236, 224, 0.09);
+  box-shadow: 0 1px 0 rgba(226, 244, 235, 0.05) inset;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s var(--ease-spring),
+    color 0.2s ease;
+  white-space: nowrap;
+}
+.btn:hover {
+  background: rgba(226, 244, 235, 0.07);
+  border-color: rgba(214, 236, 224, 0.15);
+}
+.btn:active {
+  transform: scale(0.97);
+}
+.btn-accent {
+  color: #07100b;
+  background: linear-gradient(165deg, #effbf4, var(--acid) 55%, #94c2a9);
+  border-color: rgba(226, 244, 235, 0.34);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.62) inset,
+    0 0 36px -14px rgba(191, 227, 205, 0.35);
+  font-weight: 600;
+}
+.btn-accent:hover {
+  background: linear-gradient(165deg, #f6fffa, #cbebd8 55%, #9fcab4);
+}
+.btn-ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--text-dim);
+}
+.btn-ghost:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.06);
+}
+.btn-danger {
+  color: var(--danger);
+  border-color: rgba(255, 138, 138, 0.22);
+  background: rgba(255, 138, 138, 0.08);
+}
+.btn-danger:hover {
+  background: rgba(255, 138, 138, 0.14);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 32px;
+  padding: 0 13px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  letter-spacing: -0.01em;
+  color: var(--text-dim);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition:
+    background 0.18s ease,
+    color 0.18s ease,
+    border-color 0.18s ease;
+  white-space: nowrap;
+}
+.chip:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.075);
+}
+.chip[data-active="true"] {
+  color: #07100b;
+  background: var(--acid);
+  border-color: rgba(226, 244, 235, 0.32);
+  font-weight: 600;
+}
+
+.input {
+  width: 100%;
+  height: 44px;
+  padding: 0 15px;
+  border-radius: 14px;
+  color: var(--text);
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset;
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease;
+}
+.input::placeholder {
+  color: var(--text-mute);
+}
+.input:focus {
+  outline: none;
+  border-color: rgba(191, 227, 205, 0.4);
+  background: rgba(0, 0, 0, 0.34);
+  box-shadow:
+    0 0 0 4px rgba(191, 227, 205, 0.08),
+    0 1px 0 rgba(255, 255, 255, 0.04) inset;
+}
+
+/* Range slider */
+.range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 16px;
+  background: transparent;
+  cursor: pointer;
+  --range-fill: 0%;
+  --range-track: rgba(255, 255, 255, 0.16);
+}
+.range::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    var(--acid, #bfe3cd) 0%,
+    var(--acid, #bfe3cd) var(--range-fill),
+    var(--range-track) var(--range-fill),
+    var(--range-track) 100%
+  );
+}
+.range::-moz-range-track {
+  height: 4px;
+  border-radius: 999px;
+  background: var(--range-track);
+}
+.range::-moz-range-progress {
+  height: 4px;
+  border-radius: 999px;
+  background: var(--acid, #bfe3cd);
+}
+.range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  margin-top: -4px;
+  border-radius: 999px;
+  background: #fff;
+  border: none;
+  box-shadow: 0 0 0 5px rgba(191, 227, 205, 0.16);
+  opacity: 0;
+  transition: opacity 0.16s ease;
+}
+.range::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border: none;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 0 0 5px rgba(191, 227, 205, 0.16);
+  opacity: 0;
+  transition: opacity 0.16s ease;
+}
+.range:hover::-webkit-slider-thumb,
+.range:focus-visible::-webkit-slider-thumb,
+.range:hover::-moz-range-thumb,
+.range:focus-visible::-moz-range-thumb {
+  opacity: 1;
+}
+.range:focus-visible {
+  outline: none;
+}
+.range:focus-visible::-webkit-slider-runnable-track {
+  box-shadow: 0 0 0 3px rgba(191, 227, 205, 0.16);
+}
+
+/* ==========================================================================
+   Text & layout helpers
+   ========================================================================== */
+
+.eyebrow {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+
+.display-serif {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+.mask-fade-y {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 12%,
+    #000 86%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 12%,
+    #000 86%,
+    transparent 100%
+  );
+}
+
+.mask-fade-r {
+  -webkit-mask-image: linear-gradient(to right, #000 86%, transparent 100%);
+  mask-image: linear-gradient(to right, #000 86%, transparent 100%);
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.045) 0%,
+    rgba(255, 255, 255, 0.09) 50%,
+    rgba(255, 255, 255, 0.045) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.8s linear infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.page-enter {
+  animation: page-enter 0.28s ease both;
+}
+@keyframes page-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.liquid.spotify-dock {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(32, 41, 37, 0.8) 0%,
+      rgba(11, 15, 13, 0.9) 52%,
+      rgba(6, 9, 8, 0.93) 100%
+    ),
+    rgba(6, 9, 8, 0.9);
+  border-color: rgba(214, 236, 224, 0.14);
+  backdrop-filter: blur(54px) saturate(1.3);
+  -webkit-backdrop-filter: blur(54px) saturate(1.3);
+  box-shadow:
+    0 1px 0 rgba(226, 244, 235, 0.08) inset,
+    0 -1px 0 rgba(0, 0, 0, 0.5) inset,
+    0 30px 80px -32px rgba(0, 0, 0, 0.96);
+}
+
+.spotify-player-enter {
+  animation: spotify-player-enter 0.24s ease both;
+  transition-property:
+    --np-a, --np-b, --np-c, --np-g0, --np-g1, --np-g2, --np-g3, --np-g4,
+    --np-g5, --np-g6, --np-g7, --np-g8;
+  transition-duration: 1400ms;
+  transition-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+@keyframes spotify-player-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.spotify-bar-enter {
+  animation: spotify-bar-enter 0.24s var(--ease-spring) both;
+}
+@keyframes spotify-bar-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* The full-screen player fits the window: artwork and lyrics are capped by
+   the available height so the transport never falls below the fold. */
+@media (min-width: 1024px) {
+  [data-testid="spotify-full-player"] .np-artwork-size {
+    max-width: min(52vh, 470px, calc(100vh - 340px));
+    max-width: min(52vh, 470px, calc(100dvh - 340px));
+  }
+  [data-testid="spotify-full-player"] .np-lyrics-height {
+    height: min(calc(min(52vh, 470px) + 232px), calc(100dvh - 160px));
+  }
+}
+
+@media (max-height: 820px) {
+  [data-testid="spotify-full-player"] .np-title {
+    font-size: clamp(1.9rem, 4.3vh, 2.6rem);
+  }
+  [data-testid="spotify-full-player"] .np-below {
+    margin-top: 16px;
+  }
+  [data-testid="spotify-full-player"] .np-meta {
+    margin-top: 6px;
+  }
+  [data-testid="spotify-full-player"] .np-seek {
+    margin-top: 14px;
+  }
+  [data-testid="spotify-full-player"] .np-transport {
+    margin-top: 12px;
+  }
+}
+
+/* ==========================================================================
+   Album artwork frame
+   ========================================================================== */
+
+.artwork-shell {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  isolation: isolate;
+  background: #080b0b;
+  box-shadow:
+    0 1px 0 rgba(226, 244, 235, 0.08) inset,
+    0 30px 70px -34px rgba(0, 0, 0, 0.98);
+}
+.artwork-shell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: inherit;
+  border: 1px solid rgba(214, 236, 224, 0.08);
+  background: linear-gradient(
+    135deg,
+    rgba(226, 244, 235, 0.08) 0%,
+    transparent 32%,
+    transparent 70%,
+    rgba(226, 244, 235, 0.03) 100%
+  );
+  pointer-events: none;
+}
+.artwork-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.86) brightness(0.88) contrast(1.02);
+  transition:
+    transform 0.9s var(--ease-spring),
+    filter 0.7s ease;
+}
+.artwork-hover:hover .artwork-img {
+  transform: scale(1.035);
+  filter: saturate(1) brightness(0.98) contrast(1);
+}
+
+/* ==========================================================================
+   Blended full-screen artwork & view transitions
+   ========================================================================== */
+
+.blended-artwork {
+  position: relative;
+  overflow: hidden;
+  border-radius: 28px;
+  -webkit-mask-image: radial-gradient(
+    ellipse 80% 80% at 50% 48%,
+    #000 30%,
+    rgba(0, 0, 0, 0.94) 58%,
+    rgba(0, 0, 0, 0.35) 82%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 80% 80% at 50% 48%,
+    #000 30%,
+    rgba(0, 0, 0, 0.94) 58%,
+    rgba(0, 0, 0, 0.35) 82%,
+    transparent 100%
+  );
+}
+
+.blended-artwork .artwork-img {
+  filter: saturate(0.94) brightness(0.92);
+}
+
+.blended-artwork::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: inherit;
+  background: linear-gradient(
+    180deg,
+    rgba(4, 5, 6, 0) 55%,
+    rgba(4, 5, 6, 0.45) 100%
+  );
+  pointer-events: none;
+}
+
+.player-artwork {
+  view-transition-name: now-playing-artwork;
+}
+
+::view-transition-group(now-playing-artwork) {
+  animation-duration: 480ms;
+  animation-timing-function: var(--ease-spring);
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 280ms;
+  animation-timing-function: ease;
+}
+
+/* ==========================================================================
+   Tooltips & equalizer
+   ========================================================================== */
+
+.tip {
+  position: relative;
+  display: inline-flex;
+}
+
+.eq-bar {
+  width: 2px;
+  border-radius: 2px;
+  background: var(--acid);
+  transform-origin: bottom;
+  animation: eq 0.9s ease-in-out infinite;
+}
+.eq-bar:nth-child(2) {
+  animation-delay: 0.18s;
+}
+.eq-bar:nth-child(3) {
+  animation-delay: 0.36s;
+}
+@keyframes eq {
+  0%,
+  100% {
+    transform: scaleY(0.32);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+/* Audio Pulse: a live output-level waveform in the playing transport. */
+.audio-pulse {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 26px;
+  height: 18px;
+  color: inherit;
+  line-height: 0;
+  --ap-pause-w: 3px;
+  --ap-pause-h: 14px;
+  --ap-pause-gap: 3.5px;
+}
+.audio-pulse[data-size="sm"] {
+  width: 22px;
+  height: 16px;
+  --ap-pause-w: 2.5px;
+  --ap-pause-h: 12px;
+  --ap-pause-gap: 3px;
+}
+.audio-pulse[data-size="lg"] {
+  width: 32px;
+  height: 24px;
+  --ap-pause-w: 3.5px;
+  --ap-pause-h: 19px;
+  --ap-pause-gap: 4.5px;
+}
+.audio-pulse__wave {
+  grid-area: 1 / 1;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  opacity: 1;
+  transition: opacity 0.16s ease;
+}
+.audio-pulse__baseline {
+  opacity: 0.24;
+}
+.audio-pulse__pause {
+  grid-area: 1 / 1;
+  display: flex;
+  align-items: center;
+  gap: var(--ap-pause-gap);
+  opacity: 0;
+  transition: opacity 0.16s ease;
+}
+.audio-pulse__pause > span {
+  display: block;
+  width: var(--ap-pause-w);
+  height: var(--ap-pause-h);
+  border-radius: 999px;
+  background: currentColor;
+}
+.play-btn:hover .audio-pulse__wave,
+.play-btn:focus-visible .audio-pulse__wave {
+  opacity: 0;
+}
+.play-btn:hover .audio-pulse__pause,
+.play-btn:focus-visible .audio-pulse__pause {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   Now Playing & lyrics
+   ========================================================================== */
+
+.np-noise {
+  position: absolute;
+  inset: 0;
+  background-image: var(--noise);
+  opacity: 0.012;
+  /* Normal blending keeps the grain without the full-screen soft-light pass;
+     measured desktop frames improved from ~29 ms to ~19 ms. */
+  mix-blend-mode: normal;
+  pointer-events: none;
+}
+
+.lyrics-line {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font-family: var(--font-display);
+  font-weight: 650;
+  letter-spacing: -0.035em;
+  line-height: 1.24;
+  color: rgba(255, 255, 255, 0.17);
+  transition:
+    color 0.5s ease,
+    opacity 0.5s ease,
+    transform 0.6s var(--ease-spring),
+    filter 0.55s ease;
+  transform-origin: left center;
+  /* Keep the out-of-focus look subtle: a 1.8 px radius forced a full raster
+     pass per scroll frame and caused >100 ms hitches. */
+  filter: blur(0.8px);
+}
+.lyrics-line:hover {
+  color: rgba(255, 255, 255, 0.55);
+  filter: blur(0);
+}
+.lyrics-line[data-active="true"] {
+  color: #fff;
+  transform: scale(1.02);
+  filter: blur(0);
+  text-shadow: 0 6px 40px rgba(0, 0, 0, 0.45);
+}
+.lyrics-line[data-past="true"] {
+  color: rgba(255, 255, 255, 0.09);
+  filter: blur(1.2px);
+}
+
+@media (min-width: 1280px) {
+  .lyrics-line {
+    font-size: clamp(1.65rem, 2.2vw, 2.6rem);
+  }
+}
+
+/* ==========================================================================
+   Library collection graph
+   ========================================================================== */
+
+.liquid.library-panel {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(28, 36, 32, 0.68) 0%,
+      rgba(12, 17, 15, 0.82) 55%,
+      rgba(7, 10, 10, 0.88) 100%
+    ),
+    rgba(7, 10, 10, 0.8);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.library-panel-enter {
+  animation: library-panel-enter 0.18s ease both;
+}
+
+@keyframes library-panel-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ==========================================================================
+   Home stage — floating section cards
+   ========================================================================== */
+
+.home-stage-veil {
+  background:
+    radial-gradient(
+      120% 90% at 50% 0%,
+      rgba(143, 185, 163, 0.08),
+      transparent 62%
+    ),
+    rgba(3, 5, 5, 0.58);
+}
+
+.home-stage-card {
+  transform-origin: 50% 34%;
+  backface-visibility: hidden;
+  will-change: transform, opacity, filter;
+  animation: home-stage-card-rise 620ms var(--ease-spring) both;
+}
+
+.home-stage-card[data-phase="active"] {
+  z-index: 2;
+}
+
+.home-stage-card[data-phase="submerging"] {
+  z-index: 1;
+  pointer-events: none;
+  animation: home-stage-card-submerge 620ms var(--ease-out) both;
+}
+
+@keyframes home-stage-card-rise {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 26px, -120px) scale(0.972);
+    filter: blur(12px);
+  }
+  55% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes home-stage-card-submerge {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, 38px, -190px) scale(0.9);
+    filter: blur(22px);
+  }
+}
+
+/* ==========================================================================
+   Motion preferences / fallbacks
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+html[data-motion="reduced"] *,
+html[data-motion="reduced"] *::before,
+html[data-motion="reduced"] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .liquid,
+  .liquid-raised {
+    background: #10131a;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .liquid,
+  .liquid-raised {
+    background: rgba(13, 16, 22, 0.94);
+  }
+}
+
+
+}
+
+/* ==========================================================================
+   Aurora button — design grammar
+   ========================================================================== */
+
+@property --au-a {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes aurora-rotate {
+  from { --au-a: 0deg; }
+  to { --au-a: 360deg; }
+}
+
+/* Palette resting variables (stylesheet, not inline) */
+:root {
+  --au-core: #7cf5c4;
+  --au-core2: #38bdf8;
+  --au-blend: #a78bfa;
+  --au-crown: #f472b6;
+  --au-fringe: #5b6cc4;
+  --au-night: #050608;
+  --au-panel: #0a0d12;
+  --au-raised: #0f141a;
+  --au-ink: #ecf4f8;
+  --au-hairline: 16%;
+}
+
+.aurora-palette--boreal {
+  --au-core: #7cf5c4;
+  --au-core2: #38bdf8;
+  --au-blend: #a78bfa;
+  --au-crown: #f472b6;
+  --au-fringe: #5b6cc4;
+}
+.aurora-palette--verdant {
+  --au-core: #6ee7a0;
+  --au-core2: #38bdf8;
+  --au-blend: #a78bfa;
+  --au-crown: #f472b6;
+  --au-fringe: #5b6cc4;
+}
+.aurora-palette--violet {
+  --au-core: #a78bfa;
+  --au-core2: #7cf5c4;
+  --au-blend: #38bdf8;
+  --au-crown: #f472b6;
+  --au-fringe: #5b6cc4;
+}
+
+/* Base pill container */
+.aurora-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  text-decoration: none;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--au-ink);
+  text-transform: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 120ms cubic-bezier(0.16, 1, 0.3, 1);
+  isolation: isolate;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.aurora-btn:active:not(.aurora-btn--disabled) {
+  transform: scale(0.97);
+}
+
+.aurora-btn--disabled {
+  pointer-events: none;
+  opacity: 0.42;
+  cursor: not-allowed;
+}
+
+/* Sizes */
+.aurora-btn--sm { height: 32px; padding: 0 14px; font-size: 12px; }
+.aurora-btn--md { height: 40px; padding: 0 18px; font-size: 13.5px; }
+.aurora-btn--lg { height: 48px; padding: 0 24px; font-size: 15px; }
+
+/* Glow span behind the pill */
+.aurora-glow {
+  position: absolute;
+  inset: -6px -8px -12px;
+  z-index: 0;
+  border-radius: 9999px;
+  filter: blur(14px);
+  opacity: 0.55;
+  background: conic-gradient(
+    from var(--au-a),
+    var(--au-core),
+    var(--au-core2),
+    var(--au-blend),
+    var(--au-core2),
+    var(--au-core)
+  );
+  animation: aurora-rotate 60s linear infinite;
+  pointer-events: none;
+  transition: inset 220ms ease, opacity 220ms ease;
+  will-change: inset, opacity;
+}
+
+/* Static 2% dither against banding */
+.aurora-glow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0.02;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='au-dither-g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23au-dither-g)'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+/* Hover / focus-visible: glow grows and brightens */
+.aurora-btn:hover .aurora-glow,
+.aurora-btn:focus-visible .aurora-glow {
+  inset: -12px -14px -18px;
+  opacity: 0.85;
+}
+
+/* Variant: quiet — transparent, hairline only. Hover keeps the face dark so
+   the aurora reads as a halo instead of washing the label. */
+.aurora-btn--quiet .aurora-glow {
+  opacity: 0;
+  filter: blur(11px);
+}
+
+.aurora-btn--quiet:hover .aurora-glow,
+.aurora-btn--quiet:focus-visible .aurora-glow {
+  inset: -9px -11px -15px;
+  opacity: 0.32;
+}
+
+.aurora-btn--quiet:hover .aurora-pill,
+.aurora-btn--quiet:focus-visible .aurora-pill {
+  background: rgba(8, 11, 11, 0.45);
+}
+
+/* Variant: ghost */
+.aurora-btn--ghost .aurora-glow {
+  opacity: 0;
+}
+.aurora-btn--ghost:hover .aurora-glow,
+.aurora-btn--ghost:focus-visible .aurora-glow {
+  opacity: 0.3;
+}
+
+/* The dark glass pill */
+.aurora-pill {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: 9999px;
+  pointer-events: none;
+  background: linear-gradient(180deg, #0f141a 0%, #0a0d12 100%);
+  border: 1px solid rgba(236, 244, 248, 0.16);
+  box-shadow: 0 1px 0 0 rgba(236, 244, 248, 0.08) inset;
+  transition: background 220ms ease, border-color 220ms ease;
+}
+
+.aurora-btn--quiet .aurora-pill {
+  background: transparent;
+  border: 1px solid rgba(236, 244, 248, 0.16);
+  box-shadow: none;
+}
+
+.aurora-btn--ghost .aurora-pill {
+  background: transparent;
+  border: 1px solid transparent;
+  box-shadow: none;
+}
+
+/* Lit rim across the top edge */
+.aurora-rim {
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--au-core) 30%,
+    var(--au-core2) 50%,
+    var(--au-core) 70%,
+    transparent 100%
+  );
+  opacity: 0.85;
+}
+
+.aurora-btn--quiet .aurora-rim {
+  opacity: 0.35;
+}
+.aurora-btn--quiet:hover .aurora-rim,
+.aurora-btn--quiet:focus-visible .aurora-rim {
+  opacity: 0.7;
+}
+
+.aurora-btn--ghost .aurora-rim {
+  display: none;
+}
+
+/* Content layer */
+.aurora-content {
+  position: relative;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Pointerdown ripple — keyed span, core-coloured ring + glow */
+.aurora-ripple {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  border-radius: 9999px;
+  border: 1px solid var(--au-core);
+  box-shadow:
+    0 0 12px var(--au-core),
+    0 0 24px var(--au-core2);
+  pointer-events: none;
+  z-index: 3;
+  animation: aurora-ripple-expand 380ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Typography for lit display type (optional override) */
+.aurora-btn--lit .aurora-content {
+  font-family: var(--font-bricolage, "Bricolage Grotesque", var(--font-sans));
+  font-weight: 650;
+  letter-spacing: -0.015em;
+}
+
+/* Respect reduced motion. The sky holds still and hover cannot resize the
+   halo; quiet/ghost keep their resting opacity instead of glowing always. */
+@media (prefers-reduced-motion: reduce) {
+  .aurora-glow {
+    animation: none !important;
+    background: conic-gradient(from 0deg, var(--au-core), var(--au-core2), var(--au-blend), var(--au-core2), var(--au-core));
+  }
+  .aurora-btn:hover .aurora-glow,
+  .aurora-btn:focus-visible .aurora-glow {
+    inset: -6px -8px -12px;
+  }
+  .aurora-btn,
+  .aurora-btn:hover .aurora-glow,
+  .aurora-btn:focus-visible .aurora-glow {
+    transition: none !important;
+  }
+  .aurora-ripple {
+    animation: none !important;
+    display: none !important;
+  }
+}
+
+/* ==========================================================================
+   Ambient orbs
+   ========================================================================== */
+
+.ambient-orb {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(120px);
+  opacity: 0.34;
+}
+.ambient-orb--a {
+  width: 52vw;
+  height: 52vw;
+  left: -18vw;
+  top: -14vw;
+  background: radial-gradient(circle, rgba(143, 185, 163, 0.16), transparent 66%);
+}
+.ambient-orb--b {
+  width: 44vw;
+  height: 44vw;
+  right: -14vw;
+  top: 24vh;
+  background: radial-gradient(circle, rgba(164, 198, 184, 0.1), transparent 68%);
+}
+.ambient-orb--c {
+  width: 58vw;
+  height: 48vw;
+  left: 16vw;
+  bottom: -28vw;
+  background: radial-gradient(circle, rgba(78, 104, 116, 0.16), transparent 70%);
+}
+
+/* Liminal architecture: a distant doorway of cold light, a faint tiled
+   grid and a floor threshold. Decorative only. */
+.liminal-door {
+  position: absolute;
+  left: 50%;
+  top: -10vh;
+  width: min(74vw, 620px);
+  height: 78vh;
+  transform: translateX(-50%);
+  border-radius: 0 0 46% 46%;
+  background: linear-gradient(
+    180deg,
+    rgba(198, 234, 214, 0.12) 0%,
+    rgba(198, 234, 214, 0.045) 48%,
+    rgba(198, 234, 214, 0.012) 76%,
+    transparent 100%
+  );
+  filter: blur(42px);
+  opacity: 0.68;
+  mix-blend-mode: screen;
+}
+
+.liminal-frame {
+  position: absolute;
+  left: 50%;
+  top: -2vh;
+  width: min(62vw, 760px);
+  height: 66vh;
+  transform: translateX(-50%);
+  border-left: 1px solid rgba(214, 236, 224, 0.035);
+  border-right: 1px solid rgba(214, 236, 224, 0.035);
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.9),
+    rgba(0, 0, 0, 0.25) 62%,
+    transparent 88%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.9),
+    rgba(0, 0, 0, 0.25) 62%,
+    transparent 88%
+  );
+}
+
+.liminal-haze {
+  position: absolute;
+  inset-inline: 0;
+  top: 16%;
+  height: 58%;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(198, 234, 214, 0.022) 44%,
+    rgba(198, 234, 214, 0.01) 66%,
+    transparent 100%
+  );
+  filter: blur(44px);
+}
+
+.liminal-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.07;
+  background-image:
+    linear-gradient(to right, rgba(214, 236, 224, 0.3) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(214, 236, 224, 0.3) 1px, transparent 1px);
+  background-size: 132px 132px;
+  -webkit-mask-image: radial-gradient(
+    ellipse 70% 62% at 50% 44%,
+    rgba(0, 0, 0, 0.7),
+    transparent 78%
+  );
+  mask-image: radial-gradient(
+    ellipse 70% 62% at 50% 44%,
+    rgba(0, 0, 0, 0.7),
+    transparent 78%
+  );
+}
+
+.liminal-floor {
+  position: absolute;
+  inset-inline: 0;
+  top: 67%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(214, 236, 224, 0.07) 30%,
+    rgba(214, 236, 224, 0.07) 70%,
+    transparent
+  );
+}
+.liminal-floor::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -48px;
+  width: 62vw;
+  height: 120px;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    ellipse,
+    rgba(191, 227, 205, 0.055),
+    transparent 70%
+  );
+  filter: blur(34px);
+}
+
+/* ==========================================================================
+   Sheets, now-playing ambience
+   ========================================================================== */
+
+.sheet-in {
+  animation: sheet-in 0.38s var(--ease-spring) both;
+}
+@keyframes sheet-in {
+  from {
+    transform: translateX(28px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+
+/* ==========================================================================
+   Search field
+   ========================================================================== */
+
+.search-border-glow {
+  background: linear-gradient(
+    112deg,
+    rgba(255, 255, 255, 0.16),
+    rgba(143, 185, 163, 0.34) 28%,
+    rgba(255, 255, 255, 0.05) 54%,
+    rgba(215, 247, 106, 0.22) 78%,
+    rgba(255, 255, 255, 0.12)
+  );
+  background-size: 220% 220%;
+  animation: search-border-flow 8s ease-in-out infinite;
+  animation-play-state: paused;
+}
+
+.search-shell:focus-within .search-border-glow {
+  animation-play-state: running;
+}
+
+@keyframes search-border-flow {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.search-beam {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(220, 249, 231, 0.85),
+    transparent
+  );
+  opacity: 0;
+  animation: search-beam 3.8s ease-in-out infinite;
+  animation-play-state: paused;
+}
+
+.search-shell:focus-within .search-beam {
+  animation-play-state: running;
+}
+
+@keyframes search-beam {
+  0%,
+  100% {
+    transform: translateX(-24%);
+    opacity: 0;
+  }
+  25%,
+  70% {
+    opacity: 0.9;
+  }
+  50% {
+    transform: translateX(24%);
+  }
+}
+
+/* Scrollable playlist panels */
+.library-song-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(191, 227, 205, 0.22) transparent;
+  scrollbar-gutter: stable;
+}
+.library-song-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+.library-song-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.library-song-scroll::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(191, 227, 205, 0.2);
+}
+.library-song-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(191, 227, 205, 0.34);
+}
+
+/* Library workspace: one fixed-height glass surface containing a dominant
+   scrolling collection and a playback pane with the same bottom edge. */
+.library-workspace {
+  display: grid;
+  min-width: 0;
+  min-height: 0;
+  grid-template-columns: minmax(0, 1.75fr) minmax(310px, 1fr);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 26px;
+  background: rgba(5, 8, 8, 0.32);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 34px 90px -56px rgba(0, 0, 0, 0.95);
+}
+
+.library-workspace--empty {
+  display: flex;
+}
+
+@media (max-width: 767px) {
+  .library-workspace {
+    display: flex;
+    height: auto;
+    flex-direction: column;
+  }
+}
+
+@media (min-width: 768px) {
+  .library-workspace {
+    height: calc(100dvh - 13rem);
+  }
+
+  .home-stage-card .library-workspace {
+    height: 100%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .library-workspace {
+    height: calc(100dvh - 15rem);
+  }
+
+  .home-stage-card .library-workspace {
+    height: 100%;
+  }
+}
+
+/* Full-player atmosphere: soft drifting washes, no hard shapes. */
+@property --np-a {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #b9bab5;
+}
+@property --np-b {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #555752;
+}
+@property --np-c {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #0b0d0c;
+}
+@property --np-g0 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #111418;
+}
+@property --np-g1 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #111418;
+}
+@property --np-g2 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #111418;
+}
+@property --np-g3 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #111418;
+}
+@property --np-g4 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #111418;
+}
+@property --np-g5 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #111418;
+}
+@property --np-g6 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #111418;
+}
+@property --np-g7 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #111418;
+}
+@property --np-g8 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #111418;
+}
+.np-atmosphere__base {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      ellipse 76% 64% at 50% 110%,
+      color-mix(in srgb, var(--np-c) 14%, transparent),
+      transparent 72%
+    ),
+    linear-gradient(165deg, #070a0b 0%, #05070a 55%, #030405 100%);
+}
+/* The cover itself, sampled to 80px, pre-blurred and scaled up. Two of these
+   crossfade between tracks and drift at different speeds, so the field flows
+   with the artwork's own colours instead of showing palette-shaped blobs. */
+.np-art {
+  position: absolute;
+  inset: -20%;
+  pointer-events: none;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  opacity: 0;
+  transform: translate3d(0, 0, 0) scale(1.3);
+  transition: opacity 1.2s ease;
+  will-change: transform, opacity;
+}
+.np-art[data-active="true"] {
+  opacity: 0.9;
+}
+.np-art--a {
+  animation: np-art-a 9s ease-in-out infinite alternate;
+}
+.np-art--b {
+  animation: np-art-b 12s ease-in-out infinite alternate;
+}
+/* A second, differently cropped copy of the blurred sleeve adds the
+   overlapping photographic motion Apple Music keeps behind the art. */
+.np-art::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: inherit;
+  background-position: 36% 64%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  opacity: 0.42;
+  animation: np-art-copy 6s ease-in-out infinite alternate;
+}
+.np-art--b::after {
+  background-position: 64% 36%;
+  animation-duration: 8s;
+}
+@keyframes np-art-a {
+  0% {
+    transform: translate3d(-12%, -8%, 0) scale(1.24) rotate(-3deg);
+  }
+  50% {
+    transform: translate3d(8%, 5%, 0) scale(1.48) rotate(1deg);
+  }
+  100% {
+    transform: translate3d(-4%, 12%, 0) scale(1.3) rotate(3deg);
+  }
+}
+@keyframes np-art-b {
+  0% {
+    transform: translate3d(10%, 7%, 0) scale(1.45) rotate(3deg);
+  }
+  50% {
+    transform: translate3d(-8%, -9%, 0) scale(1.22) rotate(-1deg);
+  }
+  100% {
+    transform: translate3d(11%, 4%, 0) scale(1.36) rotate(-3deg);
+  }
+}
+@keyframes np-art-copy {
+  0% {
+    transform: translate3d(-10%, 7%, 0) scale(1.18) rotate(1.6deg);
+  }
+  50% {
+    transform: translate3d(7%, -6%, 0) scale(1.1) rotate(-1.2deg);
+  }
+  100% {
+    transform: translate3d(-5%, -9%, 0) scale(1.22) rotate(-2.2deg);
+  }
+}
+/* Four independent palette fields move at unrelated speeds. Each gradient is
+   stretched into an ellipse and heavily overlapped, so the result reads as
+   colour opening through the sleeve rather than four visible circles. Every
+   loop returns to its start transform, which removes the reset flash. */
+.np-field {
+  position: absolute;
+  inset: -22%;
+  pointer-events: none;
+  transform: translate3d(0, 0, 0);
+  animation: np-field-drift 26s linear infinite;
+  will-change: transform;
+}
+@keyframes np-field-drift {
+  0% {
+    transform: translate3d(-2%, 1%, 0) scale(1.02);
+  }
+  33% {
+    transform: translate3d(2%, -2%, 0) scale(1.06);
+  }
+  66% {
+    transform: translate3d(-1%, -3%, 0) scale(1.03);
+  }
+  100% {
+    transform: translate3d(-2%, 1%, 0) scale(1.02);
+  }
+}
+.np-orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate3d(0, 0, 0);
+  will-change: transform, opacity;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+.np-orb--a {
+  width: 72vmax;
+  height: 52vmax;
+  left: -22vmax;
+  top: -18vmax;
+  background:
+    radial-gradient(
+      ellipse 52% 48% at 44% 42%,
+      color-mix(
+          in srgb,
+          color-mix(in srgb, var(--np-a) 72%, var(--np-g0) 28%) 84%,
+          white 16%
+        )
+        0%,
+      color-mix(in srgb, var(--np-a) 30%, transparent) 58%,
+      transparent 72%
+    ),
+    radial-gradient(
+      ellipse 48% 54% at 62% 60%,
+      color-mix(
+          in srgb,
+          color-mix(in srgb, var(--np-g1) 62%, var(--np-b) 38%) 86%,
+          white 14%
+        )
+        0%,
+      color-mix(in srgb, var(--np-g1) 24%, transparent) 56%,
+      transparent 72%
+    );
+  animation-name: np-orb-a;
+  animation-duration: 25s;
+  animation-delay: -5s;
+  opacity: 0.30;
+}
+.np-orb--b {
+  width: 64vmax;
+  height: 54vmax;
+  right: -20vmax;
+  top: 0;
+  background:
+    radial-gradient(
+      ellipse 54% 50% at 52% 46%,
+      color-mix(
+          in srgb,
+          color-mix(in srgb, var(--np-b) 70%, var(--np-g2) 30%) 86%,
+          white 14%
+        )
+        0%,
+      color-mix(in srgb, var(--np-b) 28%, transparent) 58%,
+      transparent 74%
+    ),
+    radial-gradient(
+      ellipse 46% 52% at 38% 62%,
+      color-mix(
+          in srgb,
+          color-mix(in srgb, var(--np-g3) 60%, var(--np-a) 40%) 86%,
+          white 14%
+        )
+        0%,
+      color-mix(in srgb, var(--np-g3) 22%, transparent) 56%,
+      transparent 72%
+    );
+  animation-name: np-orb-b;
+  animation-duration: 33s;
+  animation-delay: -13s;
+  opacity: 0.32;
+}
+.np-orb--c {
+  width: 68vmax;
+  height: 50vmax;
+  left: 8vmax;
+  bottom: -24vmax;
+  background:
+    radial-gradient(
+      ellipse 56% 50% at 48% 46%,
+      color-mix(
+          in srgb,
+          color-mix(in srgb, var(--np-g4) 64%, var(--np-a) 36%) 82%,
+          white 18%
+        )
+        0%,
+      color-mix(in srgb, var(--np-g4) 26%, transparent) 56%,
+      transparent 72%
+    ),
+    radial-gradient(
+      ellipse 46% 54% at 62% 58%,
+      color-mix(
+          in srgb,
+          color-mix(in srgb, var(--np-g5) 58%, var(--np-b) 42%) 86%,
+          white 14%
+        )
+        0%,
+      color-mix(in srgb, var(--np-g5) 20%, transparent) 56%,
+      transparent 72%
+    );
+  animation-name: np-orb-c;
+  animation-duration: 43s;
+  animation-delay: -23s;
+  opacity: 0.28;
+}
+.np-orb--d {
+  width: 54vmax;
+  height: 64vmax;
+  right: 0;
+  bottom: -18vmax;
+  background:
+    radial-gradient(
+      ellipse 52% 56% at 50% 48%,
+      color-mix(
+          in srgb,
+          color-mix(in srgb, var(--np-g6) 60%, var(--np-b) 40%) 82%,
+          white 18%
+        )
+        0%,
+      color-mix(in srgb, var(--np-g6) 22%, transparent) 56%,
+      transparent 72%
+    ),
+    radial-gradient(
+      ellipse 44% 50% at 40% 62%,
+      color-mix(
+          in srgb,
+          color-mix(in srgb, var(--np-g7) 58%, var(--np-a) 42%) 86%,
+          white 14%
+        )
+        0%,
+      color-mix(in srgb, var(--np-g7) 20%, transparent) 56%,
+      transparent 72%
+    );
+  animation-name: np-orb-d;
+  animation-duration: 57s;
+  animation-delay: -37s;
+  opacity: 0.26;
+}
+.np-wash {
+  position: absolute;
+  inset: -10%;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      132deg,
+      transparent 8%,
+      color-mix(in srgb, var(--np-b) 34%, transparent) 36%,
+      color-mix(in srgb, var(--np-a) 28%, transparent) 58%,
+      transparent 84%
+    ),
+    radial-gradient(
+      ellipse 72% 58% at 68% 18%,
+      color-mix(in srgb, var(--np-a) 24%, transparent) 0%,
+      transparent 72%
+    );
+  animation: np-wash 59s linear infinite;
+  will-change: transform, opacity;
+  opacity: 0.42;
+}
+@keyframes np-orb-a {
+  0% {
+    transform: translate3d(-6%, -3%, 0) rotate(-2deg) scale(1.04);
+    opacity: 0.40;
+  }
+  24% {
+    transform: translate3d(10%, 5%, 0) rotate(1.6deg) scale(1.13);
+    opacity: 0.52;
+  }
+  48% {
+    transform: translate3d(3%, 13%, 0) rotate(3.4deg) scale(1.06);
+    opacity: 0.44;
+  }
+  72% {
+    transform: translate3d(-12%, 6%, 0) rotate(-1.8deg) scale(1.15);
+    opacity: 0.51;
+  }
+  100% {
+    transform: translate3d(-6%, -3%, 0) rotate(-2deg) scale(1.04);
+    opacity: 0.40;
+  }
+}
+@keyframes np-orb-b {
+  0% {
+    transform: translate3d(5%, 4%, 0) rotate(1.8deg) scale(1.08);
+    opacity: 0.46;
+  }
+  30% {
+    transform: translate3d(-11%, -5%, 0) rotate(-2.6deg) scale(1.02);
+    opacity: 0.38;
+  }
+  60% {
+    transform: translate3d(7%, -10%, 0) rotate(1.2deg) scale(1.14);
+    opacity: 0.52;
+  }
+  100% {
+    transform: translate3d(5%, 4%, 0) rotate(1.8deg) scale(1.08);
+    opacity: 0.46;
+  }
+}
+@keyframes np-orb-c {
+  0% {
+    transform: translate3d(-5%, 5%, 0) rotate(-1.2deg) scale(1.06);
+    opacity: 0.38;
+  }
+  35% {
+    transform: translate3d(11%, -4%, 0) rotate(2.4deg) scale(1.14);
+    opacity: 0.48;
+  }
+  70% {
+    transform: translate3d(-8%, -9%, 0) rotate(-3deg) scale(1.03);
+    opacity: 0.40;
+  }
+  100% {
+    transform: translate3d(-5%, 5%, 0) rotate(-1.2deg) scale(1.06);
+    opacity: 0.38;
+  }
+}
+@keyframes np-orb-d {
+  0% {
+    transform: translate3d(4%, 8%, 0) rotate(2.2deg) scale(1.09);
+    opacity: 0.36;
+  }
+  28% {
+    transform: translate3d(-9%, 3%, 0) rotate(-1.6deg) scale(1.02);
+    opacity: 0.48;
+  }
+  62% {
+    transform: translate3d(8%, -8%, 0) rotate(2deg) scale(1.14);
+    opacity: 0.42;
+  }
+  100% {
+    transform: translate3d(4%, 8%, 0) rotate(2.2deg) scale(1.09);
+    opacity: 0.36;
+  }
+}
+@keyframes np-wash {
+  0% {
+    transform: translate3d(-2%, 2%, 0) rotate(-1deg) scale(1.02);
+    opacity: 0.46;
+  }
+  33% {
+    transform: translate3d(4%, -3%, 0) rotate(1.2deg) scale(1.07);
+    opacity: 0.58;
+  }
+  66% {
+    transform: translate3d(-4%, -4%, 0) rotate(-2deg) scale(1.03);
+    opacity: 0.50;
+  }
+  100% {
+    transform: translate3d(-2%, 2%, 0) rotate(-1deg) scale(1.02);
+    opacity: 0.46;
+  }
+}
+.np-scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* A neutral veil keeps text legible without flattening the colour field.
+     The edge vignette does the heavy lifting; the centre stays clearer. */
+  background-color: rgba(8, 9, 11, 0.44);
+  background-image:
+    radial-gradient(
+      ellipse 110% 78% at 50% 44%,
+      rgba(2, 3, 4, 0.06) 30%,
+      rgba(2, 3, 4, 0.42) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(2, 3, 4, 0.34) 0%,
+      transparent 24%,
+      rgba(2, 3, 4, 0.04) 42%,
+      rgba(2, 3, 4, 0.46) 100%
+    );
+}
+.np-below {
+  text-shadow: 0 1px 24px rgba(0, 0, 0, 0.45);
+}
+/* Home cover atmosphere: palette-derived washes that drift like artwork light. */
+.home-cover-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -10;
+  overflow: hidden;
+  pointer-events: none;
+  background: #040506;
+  animation: home-cover-in 1.4s var(--ease-out) both;
+}
+.home-cover-backdrop__base {
+  position: absolute;
+  inset: 0;
+}
+.home-cover-backdrop__layer {
+  position: absolute;
+  inset: -18%;
+  opacity: 0.95;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+}
+.home-cover-backdrop__layer--a {
+  animation: home-cover-drift-a 30s ease-in-out infinite alternate;
+}
+.home-cover-backdrop__layer--b {
+  opacity: 0.86;
+  animation: home-cover-drift-b 42s ease-in-out infinite alternate;
+}
+.home-cover-backdrop__waterline {
+  position: absolute;
+  inset: -26% -16%;
+  opacity: 0.62;
+  will-change: transform;
+  animation: home-cover-sweep 36s ease-in-out infinite alternate;
+}
+.home-cover-backdrop__veil {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      120% 92% at 50% 34%,
+      transparent 30%,
+      rgba(3, 4, 4, 0.4) 78%,
+      rgba(2, 3, 3, 0.8) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(3, 4, 4, 0.16) 0%,
+      transparent 34%,
+      rgba(3, 4, 4, 0.54) 100%
+    );
+}
+.home-cover-backdrop[data-playing="false"] .home-cover-backdrop__layer,
+.home-cover-backdrop[data-playing="false"] .home-cover-backdrop__waterline {
+  animation-play-state: paused;
+}
+@keyframes home-cover-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes home-cover-drift-a {
+  from {
+    transform: translate3d(-2.5%, -1.5%, 0) scale(1.03) rotate(-1.2deg);
+  }
+  to {
+    transform: translate3d(2.5%, 2%, 0) scale(1.11) rotate(1.2deg);
+  }
+}
+@keyframes home-cover-drift-b {
+  from {
+    transform: translate3d(2%, 1%, 0) scale(1.09) rotate(1deg);
+  }
+  to {
+    transform: translate3d(-2.5%, -2%, 0) scale(1.03) rotate(-1deg);
+  }
+}
+@keyframes home-cover-sweep {
+  from {
+    transform: translate3d(-3%, 1%, 0) skewX(-2deg);
+  }
+  to {
+    transform: translate3d(3%, -1%, 0) skewX(2deg);
+  }
+}
+
+/* Taskbar liquid selection: a spring-driven glass blob with a slower rim trail. */
+.nav-liquid-indicator,
+.nav-liquid-trail {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  border-radius: 999px;
+  opacity: 0;
+}
+.nav-liquid-indicator {
+  z-index: 0;
+  background:
+    radial-gradient(
+      120% 90% at 32% 0%,
+      rgba(255, 255, 255, 0.13),
+      transparent 58%
+    ),
+    linear-gradient(
+      158deg,
+      rgba(255, 255, 255, 0.075),
+      rgba(191, 227, 205, 0.05) 52%,
+      rgba(255, 255, 255, 0.025)
+    );
+  border: 1px solid rgba(226, 244, 235, 0.09);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.24),
+    0 8px 22px -14px rgba(0, 0, 0, 0.9),
+    0 0 26px -12px rgba(191, 227, 205, 0.5);
+  transition: opacity 220ms ease;
+  will-change: transform, width, height;
+}
+.nav-liquid-indicator::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  opacity: calc(var(--liquid-energy, 0) * 0.34);
+  pointer-events: none;
+}
+.nav-liquid-indicator::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  background: linear-gradient(
+    155deg,
+    rgba(255, 255, 255, 0.09),
+    rgba(255, 255, 255, 0.012) 48%,
+    rgba(191, 227, 205, 0.05)
+  );
+}
+.nav-liquid-trail {
+  z-index: 0;
+  border: 1px solid rgba(226, 244, 235, 0.2);
+  background: radial-gradient(
+    60% 80% at 50% 50%,
+    rgba(191, 227, 205, 0.035),
+    rgba(191, 227, 205, 0) 74%
+  );
+  box-shadow: 0 0 24px 2px rgba(191, 227, 205, 0.05);
+  will-change: transform, width, height;
+}
+.nav-liquid-indicator[data-visible="true"],
+.nav-liquid-trail[data-visible="true"] {
+  opacity: 1;
+}
+.taskbar-item {
+  transition:
+    background-color 300ms ease,
+    color 100ms ease,
+    box-shadow 300ms ease;
+}
+.taskbar-item[data-liquid-hot="true"] {
+  color: rgba(255, 255, 255, 0.95);
+}
+@media (prefers-reduced-motion: reduce) {
+  .nav-liquid-trail {
+    display: none;
+  }
+}
+html[data-motion="reduced"] .nav-liquid-trail {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-cover-backdrop__layer,
+  .home-cover-backdrop__waterline {
+    animation: none !important;
+  }
+  .audio-pulse__wave {
+    display: none;
+  }
+  .audio-pulse__pause {
+    opacity: 1;
+  }
+}
+
+html[data-motion="reduced"] .home-cover-backdrop__layer,
+html[data-motion="reduced"] .home-cover-backdrop__waterline {
+  animation: none !important;
+}
+html[data-motion="reduced"] .audio-pulse__wave {
+  display: none;
+}
+html[data-motion="reduced"] .audio-pulse__pause {
+  opacity: 1;
+}
+.siri-play-button--hero {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  isolation: isolate;
+  /* The layout box stays fixed; the circle/glass morphs inside it so the
+     wave canvas and the surrounding transport never reflow on hover. */
+  transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.siri-play-button--hero .siri-play-glass {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background:
+    radial-gradient(
+      120% 150% at 50% 118%,
+      rgba(255, 255, 255, 0.06),
+      transparent 62%
+    ),
+    rgba(4, 7, 6, 0.46);
+  box-shadow:
+    0 18px 38px -24px rgba(0, 0, 0, 0.92),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  -webkit-backdrop-filter: blur(12px) saturate(1.05);
+  backdrop-filter: blur(12px) saturate(1.05);
+  transition: opacity 300ms ease;
+  pointer-events: none;
+}
+/* Fixed-size hover circle. Animating this layer (not the button box) keeps the
+   wave canvas at one resolution and the transport row perfectly still. */
+.siri-play-button--hero .siri-play-circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: -1;
+  width: 80px;
+  height: 80px;
+  margin: -40px 0 0 -40px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background:
+    radial-gradient(
+      120% 150% at 50% 118%,
+      rgba(255, 255, 255, 0.06),
+      transparent 62%
+    ),
+    rgba(4, 7, 6, 0.52);
+  box-shadow:
+    0 18px 38px -24px rgba(0, 0, 0, 0.92),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  -webkit-backdrop-filter: blur(12px) saturate(1.05);
+  backdrop-filter: blur(12px) saturate(1.05);
+  opacity: 0;
+  transform: scale(0.82);
+  transition:
+    opacity 300ms ease,
+    transform 380ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+@media (min-width: 640px) {
+  .siri-play-button--hero .siri-play-circle {
+    width: 96px;
+    height: 96px;
+    margin: -48px 0 0 -48px;
+  }
+}
+.np-transport {
+  gap: 0.75rem;
+}
+.np-transport > .tip {
+  transition:
+    opacity 480ms ease,
+    transform 380ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+@media (min-width: 640px) {
+  .np-transport {
+    gap: 1.5rem;
+  }
+}
+@media (hover: hover) {
+  .siri-play-button--hero:hover .siri-play-glass {
+    opacity: 0;
+  }
+  .siri-play-button--hero:hover .siri-play-circle {
+    opacity: 1;
+    transform: scale(1);
+  }
+  /* Bring the skip buttons toward the visible circle with transforms only;
+     the flex gap stays constant so nothing reflows. */
+  .np-transport:has(.siri-play-button--hero:hover) > .tip:first-child {
+    transform: translateX(44px);
+  }
+  .np-transport:has(.siri-play-button--hero:hover) > .tip:last-child {
+    transform: translateX(-44px);
+  }
+}
+@media (min-width: 640px) and (hover: hover) {
+  .np-transport:has(.siri-play-button--hero:hover) > .tip:first-child {
+    transform: translateX(66px);
+  }
+  .np-transport:has(.siri-play-button--hero:hover) > .tip:last-child {
+    transform: translateX(-66px);
+  }
+}
+.np-transport[data-submerged="true"] .siri-play-glass {
+  opacity: 0;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.np-transport[data-submerged="true"] > .tip {
+  opacity: 0;
+  transform: translateY(4px) scale(0.96);
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .np-transport,
+  .np-transport .siri-play-button--hero,
+  .siri-play-button--hero .siri-play-glass,
+  .siri-play-button--hero .siri-play-circle,
+  .np-transport > .tip {
+    transition-duration: 0.01ms;
+  }
+}
+html[data-motion="reduced"] .np-transport,
+html[data-motion="reduced"] .np-transport .siri-play-button--hero,
+html[data-motion="reduced"] .siri-play-button--hero .siri-play-glass,
+html[data-motion="reduced"] .siri-play-button--hero .siri-play-circle,
+html[data-motion="reduced"] .np-transport > .tip {
+  transition-duration: 0.01ms;
+}
+.siri-play-button--panel {
+  width: 160px;
+  height: 56px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background:
+    radial-gradient(
+      120% 150% at 50% 118%,
+      rgba(255, 255, 255, 0.055),
+      transparent 62%
+    ),
+    rgba(4, 7, 6, 0.56);
+  box-shadow:
+    0 14px 30px -20px rgba(0, 0, 0, 0.9),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055);
+  -webkit-backdrop-filter: blur(12px) saturate(1.05);
+  backdrop-filter: blur(12px) saturate(1.05);
+}
+.siri-play-button--compact {
+  width: 84px;
+  height: 30px;
+  border-radius: 999px;
+}
+@media (min-width: 640px) {
+  .siri-play-button--panel {
+    width: 184px;
+    height: 64px;
+    border-radius: 20px;
+  }
+  .siri-play-button--compact {
+    width: 108px;
+    height: 38px;
+  }
+}
+.siri-play-glyph {
+  opacity: 0;
+  transform: scale(0.82);
+  transition:
+    opacity 180ms ease,
+    transform 220ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  will-change: opacity, transform;
+}
+.siri-play-wave {
+  opacity: 1;
+  transform: scale(1);
+  transition:
+    opacity 180ms ease,
+    transform 240ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  will-change: opacity, transform;
+}
+/* Every transport runs the same shader; small and hero variants get a static
+   brightness lift so the silver line stays readable on ambient backgrounds. */
+.siri-play-button--hero .siri-play-wave {
+  filter: brightness(1.25) drop-shadow(0 0 8px rgba(199, 217, 204, 0.2));
+}
+.siri-play-button--panel .siri-play-wave,
+.siri-play-button--compact .siri-play-wave {
+  filter: brightness(1.7) contrast(1.15) saturate(1.1)
+    drop-shadow(0 0 6px rgba(199, 217, 204, 0.26));
+}
+.siri-play-button:hover:not([data-settled="true"]) .siri-play-glyph,
+.siri-play-button:focus-visible .siri-play-glyph {
+  opacity: 1;
+  transform: scale(1);
+}
+.siri-play-button:hover:not([data-settled="true"]) .siri-play-wave,
+.siri-play-button:focus-visible .siri-play-wave {
+  opacity: 0;
+  transform: scale(0.84);
+}
+/* The hero swaps wave -> glyph in the same frame as the circle starts.
+   Fading the wave leaves a ghost line under the pause during the morph. */
+.siri-play-button--hero:hover:not([data-settled="true"]) .siri-play-wave,
+.siri-play-button--hero:focus-visible .siri-play-wave {
+  opacity: 0;
+  transform: scale(0.84);
+  transition: none;
+}
+.siri-play-button--hero:hover:not([data-settled="true"]) .siri-play-glyph,
+.siri-play-button--hero:focus-visible .siri-play-glyph {
+  opacity: 1;
+  transform: scale(1);
+  transition: none;
+}
+/* Touch surfaces cannot hover, so paused playback keeps a visible Play
+   affordance without hiding the static wave entirely. */
+@media (hover: none) {
+  .siri-play-button[data-playing="false"] .siri-play-glyph {
+    opacity: 1;
+    transform: scale(1);
+  }
+  .siri-play-button[data-playing="false"] .siri-play-wave {
+    opacity: 0.5;
+    transform: scale(0.92);
+  }
+}
+html[data-motion="reduced"] .aurora-btn:hover .aurora-glow,
+html[data-motion="reduced"] .aurora-btn:focus-visible .aurora-glow {
+  inset: -6px -8px -12px;
+}
+
+/* Adaptive lite rendering for GPU-constrained browsers. The runtime enables
+   this only after detecting software rendering or sustained dropped frames. */
+html[data-quality="lite"] [class*="backdrop-blur"] {
+  -webkit-backdrop-filter: blur(8px) !important;
+  backdrop-filter: blur(8px) !important;
+}
+html[data-quality="lite"] [class*="backdrop-blur"][class*="fixed"] {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+html[data-quality="lite"] .liquid,
+html[data-quality="lite"] .liquid-raised {
+  -webkit-backdrop-filter: blur(12px) saturate(1.04) !important;
+  backdrop-filter: blur(12px) saturate(1.04) !important;
+}
+html[data-quality="lite"] .liquid.spotify-dock {
+  -webkit-backdrop-filter: blur(10px) saturate(1.04) !important;
+  backdrop-filter: blur(10px) saturate(1.04) !important;
+}
+html[data-quality="lite"] .home-idle-card {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  background-color: rgba(8, 12, 11, 0.82) !important;
+}
+html[data-quality="lite"] .home-stage-card {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  background: rgba(6, 9, 8, 0.95) !important;
+}
+html[data-quality="lite"] .ambient-orb,
+html[data-quality="lite"] .liminal-door,
+html[data-quality="lite"] .liminal-haze,
+html[data-quality="lite"] .liminal-floor::after {
+  filter: none !important;
+}
+html[data-quality="lite"] .liminal-door {
+  mix-blend-mode: normal;
+  opacity: 0.42;
+}
+html[data-quality="lite"] .grain::after {
+  mix-blend-mode: normal;
+  opacity: 0.04;
+}
+html[data-quality="lite"] .home-cover-backdrop__layer,
+html[data-quality="lite"] .home-cover-backdrop__waterline,
+html[data-quality="lite"] .aurora-glow {
+  animation: none !important;
+}
+html[data-quality="lite"] .np-art {
+  animation-duration: 14s;
+}
+html[data-quality="lite"] .np-art:not([data-active="true"]) {
+  display: none;
+}
+html[data-quality="lite"] .np-orb--c,
+html[data-quality="lite"] .np-orb--d,
+html[data-quality="lite"] .np-wash {
+  display: none;
+}
+html[data-quality="lite"] .spotify-player-enter {
+  transition: none;
+}
+/* Reduced motion must win over the lite ambient loops. */
+html[data-motion="reduced"] .spotify-player-enter {
+  transition: none;
+}
+html[data-motion="reduced"] .np-art,
+html[data-motion="reduced"] .np-art::after,
+html[data-motion="reduced"] .np-field,
+html[data-motion="reduced"] .np-orb,
+html[data-motion="reduced"] .np-wash {
+  animation: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .spotify-player-enter {
+    transition: none;
+  }
+  .np-art,
+  .np-art::after,
+  .np-field,
+  .np-orb,
+  .np-wash {
+    animation: none !important;
+  }
+}
+html[data-quality="lite"] .home-stage-card {
+  animation: home-stage-card-rise-lite 260ms ease both;
+}
+html[data-quality="lite"] .home-stage-card[data-phase="submerging"] {
+  animation: home-stage-card-submerge-lite 260ms ease both;
+}
+@keyframes home-stage-card-rise-lite {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+@keyframes home-stage-card-submerge-lite {
+  from {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+  }
+}
+
+/* Disconnected Spotify account: a small breathing halo on the Connect action. */
+.nav-connect-attention::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 999px;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(191, 227, 205, 0.16),
+    rgba(191, 227, 205, 0.045) 58%,
+    transparent 76%
+  );
+  border: 1px solid rgba(191, 227, 205, 0.24);
+  box-shadow:
+    0 0 18px 2px rgba(191, 227, 205, 0.16),
+    inset 0 0 12px rgba(191, 227, 205, 0.08);
+  opacity: 0.5;
+  pointer-events: none;
+  animation: nav-connect-breathe 3.8s ease-in-out infinite;
+}
+@keyframes nav-connect-breathe {
+  0%,
+  100% {
+    opacity: 0.28;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(1.02);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-connect-attention::before {
+    animation: none !important;
+    opacity: 0.7;
+    transform: none;
+  }
+}
+html[data-motion="reduced"] .nav-connect-attention::before {
+  animation: none !important;
+  opacity: 0.7;
+  transform: none;
+}
+
+/* Desktop wrapper: transparent frameless floating-player window. */
+html[data-desktop-float],
+html[data-desktop-float] body {
+  background: transparent !important;
+}
+html[data-desktop-float] body {
+  margin: 0;
+  overflow: hidden;
+}
+.desktop-floating-root {
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: transparent;
+}
+.desktop-floating-root button,
+.desktop-floating-root a,
+.desktop-floating-root [role="slider"] {
+  cursor: pointer;
+}

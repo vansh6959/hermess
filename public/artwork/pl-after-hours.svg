@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" role="img" aria-label="After Hours Bloom playlist cover">
+  <defs>
+    <radialGradient id="a" cx="30%" cy="80%" r="100%">
+      <stop offset="0" stop-color="#f4c185"/>
+      <stop offset="0.4" stop-color="#b06b8a"/>
+      <stop offset="1" stop-color="#170c18"/>
+    </radialGradient>
+    <linearGradient id="b" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2a1220" stop-opacity="0.8"/>
+      <stop offset="0.6" stop-color="#e6a15c" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#2a1220" stop-opacity="0.85"/>
+    </linearGradient>
+    <filter id="blur"><feGaussianBlur stdDeviation="58"/></filter>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+    </filter>
+  </defs>
+  <rect width="800" height="800" fill="url(#a)"/>
+  <rect width="800" height="800" fill="url(#b)"/>
+  <g filter="url(#blur)" opacity="0.8">
+    <ellipse cx="240" cy="620" rx="250" ry="190" fill="#ffd6a0" opacity="0.5"/>
+    <ellipse cx="650" cy="220" rx="190" ry="160" fill="#5c2a48" opacity="0.85"/>
+  </g>
+  <g fill="none" stroke="#ffe4c2" stroke-opacity="0.32">
+    <circle cx="400" cy="400" r="230" stroke-width="0.9"/>
+    <circle cx="400" cy="400" r="170" stroke-width="0.6" stroke-opacity="0.18"/>
+    <path d="M170 470 C 300 330, 500 330, 630 470" stroke-width="1.1" stroke-opacity="0.4"/>
+  </g>
+  <circle cx="400" cy="400" r="230" fill="#ffd9ae" fill-opacity="0.05"/>
+  <rect width="800" height="800" filter="url(#grain)" opacity="0.09" style="mix-blend-mode:overlay"/>
+</svg>
